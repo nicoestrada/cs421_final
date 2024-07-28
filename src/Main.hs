@@ -3,6 +3,8 @@ import Network.Socket
 import Network.Socket.ByteString (recv, sendAll)
 import qualified Data.ByteString.Char8 as BS
 
+-- TODO: error handling, client handler keep alive after response
+
 main :: IO ()
 main = do
     sock <- socket AF_INET Stream 0 -- init socket
@@ -20,8 +22,8 @@ mainLoop sock = do
 
 handleClient :: Socket -> IO ()
 handleClient conn = do
-    msg <- recv conn 1024
+    msg <- recv conn 1024 -- setting maximum number of bytes to receive
     putStrLn $ "Received: " ++ BS.unpack msg
     let response = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n\r\nHello, World!" -- response from server to client with info 
     sendAll conn $ BS.pack response
-    close conn -- close connection after client handler is done
+    close conn -- close connection after response is sent
