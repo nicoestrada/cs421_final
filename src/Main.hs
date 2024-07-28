@@ -7,7 +7,7 @@ main :: IO ()
 main = do
     sock <- socket AF_INET Stream 0 -- init socket
     bind sock (SockAddrInet 8080 0) -- bind it to port 8080
-    listen sock 5
+    listen sock 5 -- setting maximum number of connections to 5
     putStrLn "Server listening on port 8080"
     mainLoop sock -- start mainloop with socket
 
